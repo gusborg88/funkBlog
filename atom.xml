@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title></title>
+    <link rel="self" type="application/atom+xml" href="https://funkin.me/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://funkin.me"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-02-23T00:00:00+00:00</updated>
+    <id>https://funkin.me/atom.xml</id>
+    <entry xml:lang="en">
+        <title>WEEK OF 2024&#x2F;02&#x2F;23 - Charting a Course From Frustration to Delight</title>
+        <published>2024-02-23T00:00:00+00:00</published>
+        <updated>2024-02-23T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2024-02-23/"/>
+        <id>https://funkin.me/blog/2024-02-23/</id>
+        
+        <content type="html" xml:base="https://funkin.me/blog/2024-02-23/">&lt;p&gt;Hi, this is EliteMasterEric, full-time Funkin&#x27; programmer, and guest author of today&#x27;s blog post.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;absence&quot;&gt;Absence&lt;&#x2F;h1&gt;
+&lt;p&gt;Writing these blog posts isn&#x27;t super easy at the best of times. Creating a concise breakdown on the inner workings of something you spent a lot of time on, that&#x27;s digestible for a wider audience. It gets exponentially harder if the thing you worked on is tied into something else that&#x27;s secret. I could write a blog post about all the work I did on some waveform renderer, but it would be hard to talk about if it&#x27;s intended for something that we intended to keep secret.&lt;&#x2F;p&gt;
+&lt;p&gt;And sometimes the thing that&#x27;s being worked on is something that&#x27;s completely secret&#x2F;under an NDA, or not even for this update, to where if the person could even say anything about what they worked on it would look like a bad SCP article, full of [REDACTED] and [DATA EXPUNGED] and ████████████.&lt;&#x2F;p&gt;
+&lt;p&gt;Compound that over the entire team, and you get a situation where maybe one person has something they actually want to talk about, but we can&#x27;t put out a tiny blog post that&#x27;s like one paragraph long from one team member, so that ends up sitting around waiting for more people to make blog posts...&lt;&#x2F;p&gt;
+&lt;p&gt;And then you get in a situation like &amp;quot;wait, it&#x27;s been HOW long since somebody put out a blog post?&amp;quot; and people getting mad that we&#x27;re not communicating and saying that we spent all the Kickstarter money on crack† even though you&#x27;ve been working full-time on this thing or even more and just want your work out there so people can appreciate that you&#x27;re using their money and your time to create something with actual worth.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;INHALE&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Yeah.&lt;&#x2F;p&gt;
+&lt;p&gt;I think the solution is to make a show of good faith. Bring something big out of the vault. Show off a little of what I&#x27;ve personally been developing on-and-off since... Git says September 7, 2022? Wow.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;frustration&quot;&gt;Frustration&lt;&#x2F;h1&gt;
+&lt;p&gt;Charting (i.e. the process of mapping out the notes players have to hit for each difficulty of a song) is an incredibly important step in the development pipeline. It&#x27;s basically the level design for Funkin&#x27;! In order to make good levels, you need good tools in place to make them. Take for instance any Super Mario game. The game could have great graphics and interesting mechanics, but if the level designers can&#x27;t quickly iterate and improve to create interesting experiences, it can&#x27;t be fun, and they can&#x27;t do that unless they have a tool which makes it easy, nay, FUN to build a level. Building your own level CAN be fun, that&#x27;s why Super Mario Maker even exists.&lt;&#x2F;p&gt;
+&lt;p&gt;During development, (this would have been shortly after I officially joined the Crew as a full-time employee, I had previously ), I specifically recall being in a call with Dave, and him asking me how to access the chart editor from that build of the game. At the time, that looked something like this:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-week-7.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;You could only see one snippet of song at a time, and the best indication of where you were in the song was a little number in the top left. Your only controls were pressing Space to play and pause the song, and you had to use your mouse to place notes. The controls available on the right side required you to manipulate unlabelled fields in a little tabbed view on the right side. The player and opponent switched sides every few bars for no discernable reason. No selecting to move them around or copy-paste them, only placing and removing individual notes. Convenience features like waveforms and hitsounds were completely absent. If you needed to place a note between the grid squares you were out of luck. Placing hold notes involved placing a note and then fiddling with one of the aforementioned unlabelled fields. Saving the chart was a massive pain. Getting anything specific done was borderline torture.&lt;&#x2F;p&gt;
+&lt;p&gt;Dave got REALLY upset about this, and began going on a tirade about this being one of the worst pieces of software ever made (no offense to Cam! He made this in a couple hours during a game jam and had only made a few usability tweaks since then). When Dave asked how to load a new song into the editor to start charting it (that&#x27;s the neat part, you don&#x27;t), we both knew that for something that would end up being a core pillar of our develpment workflow, something need to be used THREE times over, for EVERY song in the game, and EVERY remix for that song, in PERPETUITY, we needed a tool that was capable of making that process less of a chore.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;focus&quot;&gt;Focus&lt;&#x2F;h1&gt;
+&lt;p&gt;As I looked at what other engines had done with charting at the time, and as I looked at our internal discussions of what we wanted from a &amp;quot;revised&amp;quot; chart editor, I knew for a fact that the chart editor would have to be an entirely new chunk of code, built completely from scratch, with these capabilites in mind from the get-go, and the rest of the game built around supporting those capabilities.&lt;&#x2F;p&gt;
+&lt;p&gt;This ended up becoming my primary focus for more than a year. I&#x27;d get assigned to work on other things on and off (Redo the input system! Get cutscenes working! Redo scoring! Work on &lt;a href=&quot;&#x2F;img&#x2F;caught-in-4k.mp4&quot; id=&quot;shh-dont-tell-anyone&quot; style=&quot;display: inline; text-decoration: none; cursor: default; color: inherit&quot;&gt;████████████&lt;&#x2F;a&gt; (I told you about that NDA)! Fix issues with gamepad!) but once I was done I&#x27;d get back to work building, and iterating, and adding important features, and inserting little bits of convenience and flair.&lt;&#x2F;p&gt;
+&lt;p&gt;As I worked, I drew inspiration from the tools I (and the coworkers I sought feedback from!) used and enjoyed every day. VSCode, Adobe Flash, Arrow Vortex, FL Studio, Project DIVA F 2nd, Mario Maker, and even Psych Engine all made their mark on what is now my single largest programming project to date.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;accompaniment&quot;&gt;Accompaniment&lt;&#x2F;h1&gt;
+&lt;p&gt;Oh, yeah, almost forgot, put this on in the background while you read.&lt;&#x2F;p&gt;
+&lt;div &gt;
+    &lt;iframe style=&quot; width: 100%; height: 480px;&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;yFHbQFH09Io&quot; &quot;
+        webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;&lt;h1 id=&quot;delight&quot;&gt;Delight&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-first-look.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Enough fanfare.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Where to start? All my biggest gripes with the old chart editor are gone. No more of weird logic that dividing the chart into sections, just one long scrolling view. No more having camera changes flip the chart; the opponent is always on the left and the player is always on the right. The waveform underneath character&#x27;s icon (which can be clicked to switch character!), the measure ticks on the left side, the colored note preview on the far left, and the video-player-like controls at the bottom provide redundancy in the important task of making sure the player always knows exactly where in the song they&#x27;re looking.&lt;&#x2F;p&gt;
+&lt;p&gt;The UI is powered by &lt;a href=&quot;http:&#x2F;&#x2F;haxeui.org&#x2F;&quot;&gt;HaxeUI&lt;&#x2F;a&gt;, which is so much faster to develop for and much more powerful than the existing Flixel UI that I wonder why we even used it. HaxeUI provides a wide variety of components, automatic flowing layouts, menus, dropdowns, tooltips, dialogs, and more. This infrastructure allowed me to recreate something I loved from GIMP; toolbox windows. Many of the controls that used to be in one clunky immovable menu are now divided up into little dialogs that you can expand and collapse or rearrange to create your OWN layout.&lt;&#x2F;p&gt;
+&lt;video src=&quot;&#x2F;img&#x2F;chart-editor-toolboxes.mp4&quot; controls=&quot;controls&quot; style=&quot;max-width: 730px;&quot;&gt;
+&lt;&#x2F;video&gt;
+&lt;p&gt;&lt;em&gt;Expand &#x27;em! Collapse &#x27;em! Rearrange &#x27;em!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;It also leaves space for neat tools that would never have fit in the old UI.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-offsets-toolbox.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Here&#x27;s a view which lets you set apply an audio offsets for the instrumental or individual vocal tracks.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The toolbar at the top is the kind you&#x27;d expect from other editors, and has menus packed with commands. File emphasizes that the editor handles charts like normal files now, with a New Chart button taking you to a wizard to import audio and the options for Open, Open Recent, Save, and Save As that you&#x27;d expect from a modern application. Edit includes features like Copy&#x2F;Paste, a robust Undo&#x2F;Redo system with unlimited history, select all, Note Snapping precision options, and toggles for Live Input mode. View is pretty bare and currently only houses a theme selector and a difficulty switcher (Easy&#x2F;Normal&#x2F;Hard are all in one chart now and you can switch between them with a hotkey). Audio includes a metronome, hitsounds, and volume sliders. Test lets you playtest a song, in either a minimal mode with faster loading times or in the full stage with all characters, stage props, and scripts in place. There&#x27;s an option to start playtesting at the position of the playhead and buttons to time travel (those ones stopped working I gotta get around to that!). Window contains checkboxes to bring up any toolboxes you closed, and Help just has a dialog that lists all the keyboard shortcuts.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-menu-edit.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;The Edit menu. Fun fact, copy&#x2F;paste actually uses the system clipboard!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-menu-audio.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;The Audio menu. Having custom controls in the dropdown is a little quirky but HaxeUI supports it just fine!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-menu-window.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;The Window menu. No the screenshot isn&#x27;t cutting anything off you&#x27;re imagining things.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;For those wondering, &lt;code&gt;FNFC&lt;&#x2F;code&gt; files are our new standard for developing charts, created to simplify the process of saving and loading. It contains the chart data, along with all the audio files inside it so you don&#x27;t need to fiddle around with telling the game which files to use every time you load it.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-file-format-zip.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;The &amp;quot;Renamed ZIP&amp;quot; technique is a tried-and-true method of creating new file formats in the software development world.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The grid area itself is divided up into measures and beats to help orient yourself while scrolling. The bright red playhead in the middle represents your actual position in the song and can be moved by clicking and dragging in the time ticks on the left side, or by holding ALT while scrolling. Pressing SPACE will smoothly scroll the grid as the song plays. With regards to keyboard shortcuts, there&#x27;s probably several dozen, to where nearly every option has an associated keyboard shortcut, so you can navigate around and do work without having to move your hand constantly from the mouse to the keyboard. There is also an optional &amp;quot;Live Input&amp;quot; mode, which lets you place notes at the playhead with WASD&#x2F;Up-Down-Left-Right. Notes placed this way (or with the mouse) will use the current snap setting you&#x27;ve defined, so you could easily chart a section of 24th notes by placing the playhead at the top, tapping out some notes, and then proofreading after.&lt;&#x2F;p&gt;
+&lt;video src=&quot;&#x2F;img&#x2F;chart-editor-copy-paste.mp4&quot; controls=&quot;controls&quot; style=&quot;max-width: 730px;&quot;&gt;
+&lt;&#x2F;video&gt;
+&lt;p&gt;&lt;em&gt;Conveniences like dragging notes to move them and Ctrl-F to flip makes copying sections more intuitive.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A big feature I haven&#x27;t talked about yet is the Song Events feature, which vastly improves how we create charts and will become even better in the future. Song Events are manipulated in the ninth column on the right side, and don&#x27;t appear as notes on either player&#x27;s strumline. Instead, an appropriate chunk of code gets run when the event is hit. The main thing it&#x27;s used for right now is camera control; previously, camera movement was tied to specific sections, but you can now focus the camera on either character (or Girlfriend, or a specific position on the stage!) whenever you like. There&#x27;s only a couple built-in events right now (such as one that triggers a character or stage prop to play an animation) but this system is very extensible and mods can add new ones, so I expect to see people implementing Blammed Lights with it very quickly.&lt;&#x2F;p&gt;
+&lt;video src=&quot;&#x2F;img&#x2F;chart-editor-events-toolbox.mp4&quot; controls=&quot;controls&quot; style=&quot;max-width: 730px;&quot;&gt;
+&lt;&#x2F;video&gt;
+&lt;p&gt;&lt;em&gt;The form under the dropdown is generated dynamically using data provided by the event type!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;There&#x27;s still a bunch of features I want to add in the future, from little things (I have some ideas on how to select notes with just your keyboard) to larger features (I had to cut an animation preview feature because character sprites weren&#x27;t working in the little dialogs, it might come back eventually). The visuals could definitely use a bunch of work too, but the artists have simply been busy with other stuff, so the interface is mostly a mix of polished assets (like the cursor), default styling (like the dialogs), and programmer art (like the playhead and event icons).&lt;&#x2F;p&gt;
+&lt;p&gt;I think I&#x27;ll leave things there, I&#x27;ve covered large swaths of the editor&#x27;s functionality and can go over some of the more specific stuff in the future, but the best feature of the chart editor is... the kind of thing you can&#x27;t show in a screenshot, or a video. I think it&#x27;s all the feedback from a large variety of people, the thorough quality control it&#x27;s gone through, that makes it feel FUN to use. Dave in particular is probably the best at giving feedback that helps make things JUICY. It takes a programmer to come up with an undo&#x2F;redo system, and an artist to suggest that holding Ctrl-Z should repeatedly undo actions and make a zesty little sound effect every time. It&#x27;s all those things that make it feel like any member of the team has the ability to take charting into their own hands and make a fun level now.&lt;&#x2F;p&gt;
+&lt;p&gt;Plus, it pretty much never crashes!&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;chart-editor-crash-recovery.png&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;...except for when it does.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;creativity&quot;&gt;Creativity&lt;&#x2F;h1&gt;
+&lt;p&gt;We&#x27;re finally done, and since this is &lt;em&gt;MY&lt;&#x2F;em&gt; blog post, &lt;em&gt;I&lt;&#x2F;em&gt; get to choose the fanart and song of the week!&lt;&#x2F;p&gt;
+&lt;p&gt;I personally really like this &lt;a href=&quot;https:&#x2F;&#x2F;www.newgrounds.com&#x2F;art&#x2F;view&#x2F;igjh&#x2F;holidaysimulator&quot;&gt;Senpai art&lt;&#x2F;a&gt; by &lt;a href=&quot;https:&#x2F;&#x2F;igjh.newgrounds.com&#x2F;&quot;&gt;IGJH&lt;&#x2F;a&gt;! It just oozes charm it&#x27;s so great.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;img&#x2F;holiday-simulator.webp&quot; alt=&quot;&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;As for the music, here&#x27;s a taste of the kind of stuff I enjoy.&lt;&#x2F;p&gt;
+&lt;div &gt;
+    &lt;iframe style=&quot; width: 100%; height: 480px;&quot; src=&quot;https:&#x2F;&#x2F;www.youtube-nocookie.com&#x2F;embed&#x2F;KoT2mt4Yxfk&quot; &quot;
+        webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;&#x2F;iframe&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;†Only most of the Kickstarter money was spent on crack.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;09&#x2F;18 - FunkCoin</title>
+        <published>2023-09-18T00:00:00+00:00</published>
+        <updated>2023-09-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-09-18/"/>
+        <id>https://funkin.me/blog/2023-09-18/</id>
+        
+        <summary type="html">&lt;p&gt;funkin blog fo the week... . big announcement... FunkCoin. Yep you heard right. FunkCoin. Web3 is looking more... awesome!! &lt;&#x2F;p&gt;
+&lt;p&gt;just joking, this week is just a week of Friday Night Funkin&#x27; development team blog posts!!! Mostly me this week derp! I need to get more people from crew to cook on blogs of where their brains are at.... this week we have &lt;em&gt;Sunni&lt;&#x2F;em&gt; who wrote her first blog post for us woohoo!! &lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;09&#x2F;04: BELATED BLOG POSTS ABOUT TORONTO LOL</title>
+        <published>2023-09-04T00:00:00+00:00</published>
+        <updated>2023-09-04T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-09-04/"/>
+        <id>https://funkin.me/blog/2023-09-04/</id>
+        
+        <summary type="html">&lt;p&gt;we wrote a small handful of blogs about the funkin gang out here in Toronto earlier this month, but me and Dave have been so damn busy, that I never got around to working on blogs and writing up anything else! So here&#x27;s a few blogs from earlier this month we wrote that we are finally getting out heheh.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;08&#x2F;01: The Funkin&#x27; CREW in Toronto!</title>
+        <published>2023-08-01T00:00:00+00:00</published>
+        <updated>2023-08-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-08-01/"/>
+        <id>https://funkin.me/blog/2023-08-01/</id>
+        
+        <summary type="html">&lt;p&gt;Hello everyone welcome to Funkin&#x27; WEEKLY-ish blog!!! Bit light blog this week since there&#x27;s a busy week ahead of us! But wanted to share some words and thoughts of what we&#x27;re up to this week!!! zoo wee mama!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023 &#x2F; 07 &#x2F; 19: WE ARE SO BACK EDITION</title>
+        <published>2023-07-19T00:00:00+00:00</published>
+        <updated>2023-07-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-07-19/"/>
+        <id>https://funkin.me/blog/2023-07-19/</id>
+        
+        <summary type="html">&lt;p&gt;the friday night funking blog resumes... today!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK of 2023 &#x2F; 05 &#x2F; 30: GLENSIDE GAMERS EDITION</title>
+        <published>2023-05-31T00:00:00+00:00</published>
+        <updated>2023-05-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-05-31/"/>
+        <id>https://funkin.me/blog/2023-05-31/</id>
+        
+        <summary type="html">&lt;p&gt;hello everyone... apologies for missing blog from last week!!! Last monday I was spending a lot of the day travelling, I&#x27;m in Philly at the Newgrounds office with PhantomArcade! Trading back the work trip together after he came to Canada. As of writing, I have another week left here, but I will hop back over soon, since I have some personal things to take care of back home!!! But then I also want to aim to be back in philly in a few weeks!! &lt;&#x2F;p&gt;
+&lt;p&gt;anyways.. here is bloggs&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;05&#x2F;16: PILLS EDITION</title>
+        <published>2023-05-16T00:00:00+00:00</published>
+        <updated>2023-05-16T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-05-16/"/>
+        <id>https://funkin.me/blog/2023-05-16/</id>
+        
+        <summary type="html">&lt;p&gt;I couldn&#x27;t figure out what to title this blog post. I got a tiny lil infection or somethin on my insides and the doctors gave me antibiotics, so that&#x27;s why this one is called pills edition. (nothing dire btw thanks for asking)&lt;&#x2F;p&gt;
+&lt;p&gt;blog is day late... but it&#x27;s nicer than when the blogs were on Friday when they would slip friday, and be released on monday, a whole 3 days later!!! Now they are just a day late when I slip on them teehee&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;05&#x2F;08: PICO DAY EDITION</title>
+        <published>2023-05-09T00:00:00+00:00</published>
+        <updated>2023-05-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-05-09/"/>
+        <id>https://funkin.me/blog/2023-05-09/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO EVERYONE, over the weekend... was Pico Day on Newgrounds!!! I hope everyone had fun lil weekend, there&#x27;s a lotta damn awesome contributions... so go check em out NOW.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>week of 2023&#x2F;04&#x2F;23: Devops edition</title>
+        <published>2023-04-25T00:00:00+00:00</published>
+        <updated>2023-04-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-04-25/"/>
+        <id>https://funkin.me/blog/2023-04-25/</id>
+        
+        <summary type="html">&lt;p&gt;hello everyone welcome to da funkin weekly again!!!! Apologies for the mischief and posting on the Sunday today!!! I need a better habit for myself to write first thing on Friday morning to write a buncho blog posts!!! I got busy later in the day!!! &lt;&#x2F;p&gt;
+&lt;p&gt;In anycase, it&#x27;s been a pretty damn solid week of work I like to think!!! This blog will simply recount it... as always!!!&lt;&#x2F;p&gt;
+&lt;p&gt;One thing I want to try to start doing is small lil community highlights, whether it&#x27;s sharing a cool piece of fanart, or funny posts or memes or interesting videos.... I will share em below!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>week 2023&#x2F;04&#x2F;14 shoutouts da greenhouse edition</title>
+        <published>2023-04-16T00:00:00+00:00</published>
+        <updated>2023-04-16T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-04-16/"/>
+        <id>https://funkin.me/blog/2023-04-16/</id>
+        
+        <summary type="html">&lt;p&gt;earlier today i participated in a local smash melee tourney for the first time ever and i didnt win any damn matches!! but it was an awesome time!! shoutouts da greenhouse in toronto!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;04&#x2F;07: GOOD FRIDAY</title>
+        <published>2023-04-08T00:00:00+00:00</published>
+        <updated>2023-04-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-04-08/"/>
+        <id>https://funkin.me/blog/2023-04-08/</id>
+        
+        <summary type="html">&lt;p&gt;hello everyone... welcome to the funkin blog for..... Friday!!! Actually posted on a damn friday!!! Yeehaw!!! Good handful of blogs... mostly written by me!!! bwahahah!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;03&#x2F;27: VITAMIN D EDITION</title>
+        <published>2023-03-30T00:00:00+00:00</published>
+        <updated>2023-03-30T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-03-30/"/>
+        <id>https://funkin.me/blog/2023-03-30/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO FUNKER FREAKERS!!!&lt;&#x2F;p&gt;
+&lt;p&gt;As I am writing this late post on monday night west coast NA time.... me and dave are waiting for our flight back to canada!!! it was rainy for the for the first few days of GDC, with a pretty nasty storm on the way home, but afterwards it was the california i damn expected to see, nice sunny days wahoo!!! I live in a basement apartment in toronto, so i get very little sunlight unless I&#x27;m heading out to work out of the local Toronto Public LIbraries... it can be rough out here!!! Gotta eat up my vitamin Ds like candy when I&#x27;m in canada!!! The sun is nice and is very rejuvenating... anyways here is the post!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK of 2023&#x2F;03&#x2F;20: SPRINGTIME</title>
+        <published>2023-03-21T00:00:00+00:00</published>
+        <updated>2023-03-21T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-03-21/"/>
+        <id>https://funkin.me/blog/2023-03-21/</id>
+        
+        <summary type="html">&lt;p&gt;the wip title for this post was &amp;quot;basically springtime&amp;quot; but those of you who noticed.... we missed a blog post or two!! Apologies for that, things have just been a bit hectic for past few weeks!!! Blogs have been written in the weeks.... just haven&#x27;t gotten to posting or anything like that.... I need to super streamline the blog posting process.... Right now there&#x27;s a lotta manual busywork I gotta do whenever a blog gets posted... so making it so that I can just post everyones blogs...dats da dream... anyways... here&#x27;s all the blogs you fools!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;03&#x2F;06: FONKING...</title>
+        <published>2023-03-06T00:00:00+00:00</published>
+        <updated>2023-03-06T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-03-06/"/>
+        <id>https://funkin.me/blog/2023-03-06/</id>
+        
+        <summary type="html">&lt;p&gt;ANOTHER WEEK ANOTHER SLIGHTLY LATE BLOG POST!!!&lt;&#x2F;p&gt;
+&lt;p&gt;apologies.... was partly waiting for some things on Friday, but then the weekend rolled around, and figured I&#x27;d just wait til Monday!!!&lt;&#x2F;p&gt;
+&lt;p&gt;This week has a nice handful of mini contributions from people here about what they&#x27;ve been up to, and as always, how progress in general has been going with the game!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;02&#x2F;27: It&#x27;s Friday Somewhere Edition</title>
+        <published>2023-02-27T00:00:00+00:00</published>
+        <updated>2023-02-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-02-27/"/>
+        <id>https://funkin.me/blog/2023-02-27/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO EVERYONE welcome back to the WEEKLY FRIDAY NIGHT FREAKING blog web channel.... i hope everyone&#x27;s friday is going well heheh&lt;&#x2F;p&gt;
+&lt;p&gt;this week is a bit light on person by person blogs! But I&#x27;ll try my best to round up what everyone&#x27;s been up to this week!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;02&#x2F;17: SHOUTOUTS TO GOOD SMILE EDITION</title>
+        <published>2023-02-17T00:00:00+00:00</published>
+        <updated>2023-02-17T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-02-17/"/>
+        <id>https://funkin.me/blog/2023-02-17/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO FIRST AND FOREMOST WE HAVE FRIDAY NIGHT FUNKIN&#x27; NENDOROID BOYFRIEND FIGURE FOR PRE-ORDER BY GOOD SMILE!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;02&#x2F;10: THE FUNK AND THE FURIOUS</title>
+        <published>2023-02-10T00:00:00+00:00</published>
+        <updated>2023-02-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-02-10/"/>
+        <id>https://funkin.me/blog/2023-02-10/</id>
+        
+        <summary type="html">&lt;p&gt;welcome to funkblog episode 4. i think i will use this beginning space of the blog to talk about the STATE of the blog, in terms of TECH, and where everything is headed with it in general!&lt;&#x2F;p&gt;
+&lt;p&gt;but in this intro blurb i will also give rundown on blog... posts about kickstarter mischief and lil writings by phantomarcade ensue!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;02&#x2F;03: IN FUNKIN&#x27; WE TRUST</title>
+        <published>2023-02-03T00:00:00+00:00</published>
+        <updated>2023-02-03T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-02-03/"/>
+        <id>https://funkin.me/blog/2023-02-03/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO everyone, this is our THIRD WEEK of funkin blog posts!!!&lt;&#x2F;p&gt;
+&lt;p&gt;Got a small little handful of blogs here... one particularly about... kickstarter backend stuff! thats right, new authors here! yaaahoooooooooo!!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;01&#x2F;27: THE SECOND BLOG POST LOL!</title>
+        <published>2023-01-27T00:00:00+00:00</published>
+        <updated>2023-01-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-01-27/"/>
+        <id>https://funkin.me/blog/2023-01-27/</id>
+        
+        <summary type="html">&lt;p&gt;right now these are manually created by me...but eventually... they will be automated too hahahah!!!&lt;&#x2F;p&gt;
+&lt;p&gt;I gotta fix somethin up with github actions and payments, we have a crazy automated system with FNF, but since it&#x27;s on a private branch, we only have a certain amount of MINUTES we can use! I need to write something like a discord bot that can run 24&#x2F;7 and&#x2F;or doesn&#x27;t USE the as much Github minutes... in the FNF repo, there&#x27;s definitely room for improvement in terms of like... MINUTE optimization... lol&lt;&#x2F;p&gt;
+&lt;p&gt;anyways this week was a bit of a slow week with the BLOG DEVELOPMENTS. It&#x27;s mostly me, ninjamuffin!! writing blogs this week! I&#x27;ll try to give people some insight on some things we been cookin up&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>WEEK OF 2023&#x2F;01&#x2F;23: FUNKIN BLOG STUFF WAHOO LOL!</title>
+        <published>2023-01-20T00:00:00+00:00</published>
+        <updated>2023-01-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/2023-01-20/"/>
+        <id>https://funkin.me/blog/2023-01-20/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO, this post is a test of a bit of like... the MASTER post system! &lt;&#x2F;p&gt;
+&lt;p&gt;Basically the idea is, at the end of the week... all the POSTS of the week will be tossed here, and come out all at once!!
+Yippee!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Issue extra test teehee</title>
+        <published>2023-01-19T00:00:00+00:00</published>
+        <updated>2023-01-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/issue-extra-test-teehee/"/>
+        <id>https://funkin.me/blog/issue-extra-test-teehee/</id>
+        
+        <summary type="html">&lt;p&gt;** written by ninjamuffin99**
+this is a small test for the issue thingie... lol!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>what is BPM?</title>
+        <published>2023-01-19T00:00:00+00:00</published>
+        <updated>2023-01-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/what-is-bpm/"/>
+        <id>https://funkin.me/blog/what-is-bpm/</id>
+        
+        <summary type="html">&lt;p&gt;** written by PrincessMtH**
+a BPM is how many beats there are per minute.&lt;&#x2F;p&gt;
+&lt;p&gt;sounds straightforward, but, what is a &amp;quot;beat&amp;quot;? well in my lil DAW there&#x27;s 4 beats per bar, so it&#x27;s just a 4th of a bar, clearly. but not all music is written like that. sometimes there&#x27;s 3 beats per bar... we call that 3&#x2F;4. so the 3 in that means how many beats there are, and the 4 means... what does the 4 mean...? something to do with steps, surely?&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Github actions&#x2F;issues blog posting pt. 2</title>
+        <published>2023-01-18T00:00:00+00:00</published>
+        <updated>2023-01-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/funny-blogh/"/>
+        <id>https://funkin.me/blog/funny-blogh/</id>
+        
+        <summary type="html">&lt;p&gt;Wahoo, another lil blog test thing!&lt;&#x2F;p&gt;
+&lt;p&gt;Today I&#x27;ve been getting back and sorta workin on workflow-ish stuff. Getting quirks figured out, and as of right now... you SHOULD be able to write blog posts and they should be automatically uploaded to the website!!! Building and everything!!&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Github actions&#x2F;issues blog posting</title>
+        <published>2023-01-11T00:00:00+00:00</published>
+        <updated>2023-01-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/blog-post-issues-test/"/>
+        <id>https://funkin.me/blog/blog-post-issues-test/</id>
+        
+        <summary type="html">&lt;p&gt;This is a test for blog post issues! In fact... I will write the whole idea of the WORKFLOW here.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>BLOG IN PROGRESS</title>
+        <published>2023-01-10T00:00:00+00:00</published>
+        <updated>2023-01-10T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://funkin.me/blog/blogpost/"/>
+        <id>https://funkin.me/blog/blogpost/</id>
+        
+        <summary type="html">&lt;p&gt;HELLO EVERYONE READING THIS!!!&lt;&#x2F;p&gt;
+&lt;p&gt;This is the first OFFICIAL blog post! If you are reading this the day it is published... it means you are a maniac and probably stalk me!&lt;&#x2F;p&gt;
+&lt;p&gt;This is a bit of a post to look back at, and I suppose to document the process of even MAKING this damn blog!
+Moreso for the people in the future looking back a billion blogposts and reading this, and see where this blog started!
+(or digging through my github to see an abandoned project, doh!)&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>
